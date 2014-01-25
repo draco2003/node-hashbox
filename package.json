@@ -1,0 +1,24 @@
+{
+  "name": "hashbox",
+  "version": "0.0.1",
+  "description": "Where your hashes go",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/draco2003/node-hashbox.git"
+  },
+  "keywords": [
+    "hash",
+    "hashbox",
+    "blackbox"
+  ],
+  "author": "drowe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/draco2003/node-hashbox/issues"
+  },
+  "homepage": "https://github.com/draco2003/node-hashbox"
+}
