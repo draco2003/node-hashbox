@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="#Box : Where your hashes go" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>#Box</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/draco2003/node-hashbox">View on GitHub</a>
+
+          <h1 id="project_title">#Box</h1>
+          <h2 id="project_tagline">Where your hashes go</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/draco2003/node-hashbox/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/draco2003/node-hashbox/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+<a name="box" class="anchor" href="#box"><span class="octicon octicon-link"></span></a>#Box</h3>
+
+<p>Is an insert only key / hash store. 
+It accepts a key (unique identifier) and a hash (any string, less than 255 chars) and stores that pair with a little more meta data for later verification. </p>
+
+<p>To get started you can either:</p>
+
+<pre><code>$ npm install hashbox
+$ cd node_modules/hashbox
+</code></pre>
+
+<p>or </p>
+
+<pre><code>$ git clone https://github.com/draco2003/node-hashbox/ 
+$ cd node-hashbox
+$ npm install
+</code></pre>
+
+<p>Then to start the application:</p>
+
+<pre><code>$ npm start
+</code></pre>
+
+<h3>
+<a name="adding-data" class="anchor" href="#adding-data"><span class="octicon octicon-link"></span></a>Adding Data</h3>
+
+<p>simply post data to /api/hash_create with a "key" and "hash" parameter.
+  If you are looking to keep track of a folder of files, we recommend checking out <a href="https://github.com/draco2003/node-hashbot">#Bot</a></p>
+
+<h3>
+<a name="todos" class="anchor" href="#todos"><span class="octicon octicon-link"></span></a>ToDos:</h3>
+
+<ul>
+<li>Decide if we want to add an audit entry on duplicate create or just failed verification.</li>
+<li>Handle #Box errors more gracefully.</li>
+<li>Create an executable script so you can install globally</li>
+<li>Maybe add auth to Admin section (otherwise just let apache/nginx handle that)</li>
+</ul><h3>
+<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+<p>Created by <a href="https://github.com/draco2003" class="user-mention">@draco2003</a> </p>
+
+<h3>
+<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+<p>Pull requests welcome.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">#Box maintained by <a href="https://github.com/draco2003">draco2003</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
