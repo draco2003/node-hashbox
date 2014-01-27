@@ -1,0 +1,29 @@
+
+extends ../../layout/layout
+
+block content
+
+  body
+    .container
+      table#stale.table.table-striped.table-bordered
+        thead
+            th id
+            th key
+            th hash
+            th createdAt
+            th updatedAt
+        tbody
+
+    script.
+      var editor; // use a global for the submit and return data rendering in the examples
+
+      $(document).ready(function() {
+        var records;
+          $.getJSON("/api/hash_audit_stale", function(response) {
+            $('#stale').dynatable({
+              dataset: {
+                records: response.data
+              }
+            });
+          });
+      });

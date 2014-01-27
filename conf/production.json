@@ -1,0 +1,4 @@
+{
+  "database": "./database/hashes.db",
+  "days_till_stale": 1
+}
