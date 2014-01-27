@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/draco2003/node-hashbox/issues"
   },
-  "homepage": "https://github.com/draco2003/node-hashbox",
+  "homepage": "http://draco2003.github.io/node-hashbox/",
   "dependencies": {
     "connect-powered-by": "~0.1.0",
     "bootable-environment": "~0.2.0",
