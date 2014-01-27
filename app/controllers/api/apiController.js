@@ -34,13 +34,7 @@ apiController.hashVerify = function() {
       .success(function(hashObj) {
         if (hashObj) {
           if (hashObj.values.hash === self.param('hash')) {
-            hashObj.save()
-              .success(function(hash) {
-                response_json('success', null, 'Hash accepted', self);
-              })
-              .error(function(error) {
-                response_json('failure', null, 'Hash accepted, but update failed', self);
-              });
+            verify_entry(self.param('key'), self.param('hash'), self);
           } else {
             audit_entry(self.param('key'), self.param('hash'), self);
           }
@@ -99,6 +93,23 @@ function audit_entry(key, hash, self) {
     hash: self.param('hash')
   });
   hashAuditObj.save()
+    .complete(function(err) {
+      if (err) {
+        // If we get an error its most likely that its already been recorded in the audit table
+        response_json('failure', null, 'Hash not accepted, but update failed', self);
+      } else {
+        response_json('failure', null, 'Hash not acceped', self);
+      }
+  });
+}
+
+// Abstract out the HashVerify Entry
+function verify_entry(key, hash, self) {
+  var hashVerifyObj = db.HashVerify.build({
+    key: self.param('key'),
+    hash: self.param('hash')
+  });
+  hashVerifyObj.save()
     .complete(function(err) {
       if (err) {
         // If we get an error its most likely that its already been recorded in the audit table
