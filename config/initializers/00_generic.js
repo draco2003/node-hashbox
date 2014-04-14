@@ -14,4 +14,15 @@ module.exports = function() {
   conf.add( env , { type: 'file', file: __dirname + '/../../conf/' + env + '.json' });
   conf.add('all', { type: 'file', file: __dirname + '/../../conf/global.json' });
 
+  var HashBoxCore = require('hashbox-core');
+
+  var databaseFile = conf.get('database') || './database/hashes.db';
+  var options = {
+    database: databaseFile,
+    daysBeforeStale: conf.get('daysBeforeStale'),
+    daysBeforeExpires: conf.get('daysBeforeExpires')
+  };
+
+  HashBoxCore.init(options);
+
 }

@@ -5,8 +5,80 @@ block content
 
   body
     .container
-      ul
-        li
-          a(href="/admin/stale") Stale Entries
-        li
-          a(href="/admin/invalid") Invalid Hashes
+      h2 #Box Reports
+      .btn-group
+        button(type="button" data-uri="/admin/api/stale").btn.btn-default Stale
+        button(type="button" data-uri="/admin/api/invalid").btn.btn-default Invalid
+        button(type="button" data-uri="/admin/api/hashes").btn.btn-default Hashes
+
+      table#stale.table.table-striped.table-bordered.table-hover.table-condensed
+        thead
+        tbody
+
+      button(data-toggle="modal" data-target=".bs-example-modal-lg").btn.btn-primary Large modal
+      div(tabindex="-1", role="dialog", aria-labelledby="hashModalLabel", aria-hidden="true").modal.fade.detail-modal
+        .modal-dialog.modal-lg
+          .modal-content Somecontent
+
+    script.
+      function buildTable(url) {
+        $.getJSON(url, {}, function(json_data) {
+          var table_body = $('tbody');
+          table_body.empty();
+          var table_head = $('thead');
+          table_head.empty();
+          var table_header_row = $('<tr>');
+          if (json_data.rows === null) {
+            table_header_row.append($('<th>', {html: url + ' returns no data'}));
+            table_head.append(table_header_row);
+          } else {
+            var count = json_data.rows.length;
+            $.each(json_data.rows[0], function(index, item) {
+              table_header_row.append($('<th>', {html: index}));
+              table_head.append(table_header_row);
+            });
+
+            $.each(json_data.rows, function(jsonIndex, jsonRow) {
+              var table_row = $('<tr>');
+              $.each(jsonRow, function(itemIndex, item) {
+                if (itemIndex === 'key') {
+                  item = $('<a>', {class: 'modalLink', href: '#', 'data-content-url': '/admin/api/hash/' + jsonRow.id, html: item});
+                }
+                table_row.append($('<td>', {html: item}));
+              });
+
+              table_body.append(table_row);
+              if (!--count) {
+                $('#stale').tablesorter();
+                $(".modalLink").click(function() {
+                  $.getJSON($(this).data('content-url'), {}, function(json_data) {
+                    $modalContent = $('<pre>', { html: JSON.stringify(json_data) });
+                    console.log(template(json_data));
+                    $('.detail-modal').find('.modal-content').html(template(json_data));
+                    $('.detail-modal').modal('show');
+                  });
+                });
+              }
+            });
+          }
+        });
+      }
+
+      //<a data-toggle="modal" href="remote.html" data-target="#modal">Click me</a>
+      //Handle Clicking on the Report Type buttons
+      $(".btn").click(function() {
+        buildTable($(this).data('uri'));
+      });
+
+      //Build the initial table
+      buildTable('/admin/api/hashes');
+
+    script.
+
+      var source = "<div><span></span><ul>{{#rows}}<li>{{> link}}</li>{{/rows}}</ul></div>";
+
+      Handlebars.registerPartial('link', '<a href="/people/{{id}}">{{key}}</a>')
+      var template = Handlebars.compile(source);
+
+
+

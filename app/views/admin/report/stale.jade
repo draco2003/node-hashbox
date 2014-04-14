@@ -13,17 +13,16 @@ block content
             th createdAt
             th updatedAt
         tbody
+      div.div1
 
     script.
       var editor; // use a global for the submit and return data rendering in the examples
 
       $(document).ready(function() {
-        var records;
-          $.getJSON("/api/hash_audit_stale", function(response) {
-            $('#stale').dynatable({
-              dataset: {
-                records: response.data
-              }
-            });
+        //Basic
+        $('#div1').WATable(
+          {
+            url: '/admin/api/stale',
+            preFill: true
           });
       });

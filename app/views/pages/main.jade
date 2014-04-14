@@ -4,12 +4,13 @@ extends ../layout/layout
 block content
 
   body
-    img(src="/img/hashbox_logo.png")
-    p Welcome to #Box (HashBox)
-    p
-      a(href="/admin/") Checkout
-      |  the admin interface for reports.
+    .container
+      img(src="/img/hashbox_logo.png")
+      h1 Welcome to #Box (HashBox)
+      p
+        a(href="/admin/") Checkout
+        |  the admin interface for reports.
 
-    p We recomend
-      a(href="https://github.com/draco2003/node-hashbot")  #Bot
-      |  for filling your #Box
+      p We recomend
+        a(href="https://github.com/draco2003/node-hashbot")  #Bot
+        |  for filling your #Box

@@ -1,15 +1,8 @@
 var locomotive = require('locomotive')
+  , conf = require('nconf')
   , Controller = locomotive.Controller;
 
-var reportController = new Controller();
-
-reportController.stale = function() {
-  this.render();
-};
-
-reportController.invalid = function() {
-  this.render();
-};
+var reportController = new Controller()
 
 reportController.index = function() {
   this.render();

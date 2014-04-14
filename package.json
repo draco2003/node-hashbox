@@ -33,6 +33,11 @@
     "lodash": "~2.4.1",
     "debug": "~0.7.4",
     "moment": "~2.5.1",
-    "nconf": "~0.6.9"
+    "nconf": "~0.6.9",
+    "jugglingdb-sqlite3": "0.0.4",
+    "jugglingdb": "~0.2.12",
+    "knex": "~0.5.5",
+    "bookshelf": "~0.6.2",
+    "hashbox-core": "0.0.1"
   }
 }

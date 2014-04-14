@@ -12,26 +12,20 @@ module.exports = function routes() {
 
   //External API
   this.namespace('api', function() {
-    this.match('hash_create', 'api#hashCreate', {via: 'post'});
+    this.match('health','api#health', {via: 'get'});
     this.match('hash_verify', 'api#hashVerify', {via: 'post'});
-
-    //Report Endpoints, may move these under Admin section for security purposes
-    this.match('hash_audit_stale','api#hashAuditStale', {via: 'get'});
-    this.match('hash_audit_invalid','api#hashAuditInvalid', {via: 'get'});
-
-    //Temporary for initial querystring testing
-    this.match('hash_create','api#hashCreate', {via: 'get'});
     this.match('hash_verify','api#hashVerify', {via: 'get'});
-
   });
 
   //Admin Area
   this.namespace('admin', function() {
     //Admin Index
     this.root('report#index');
-
-    //Admin Reports
-    this.match('stale', 'report#stale', {via: 'get'});
-    this.match('invalid', 'report#invalid', {via: 'get'});
+    this.namespace('api', function() {
+      this.match('stale', 'api#stale', {via: 'get'});
+      this.match('invalid', 'api#invalid', {via: 'get'});
+      this.match('hashes', 'api#hashes', {via: 'get'});
+      this.match('hash/:hashId', 'api#hash', {via: 'get'});
+    })
   });
 }
