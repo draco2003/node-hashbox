@@ -11,6 +11,9 @@ block content
         button(type="button" data-uri="/admin/api/invalid").btn.btn-default Invalid
         button(type="button" data-uri="/admin/api/hashes").btn.btn-default Hashes
 
+      .pager
+        ul.mypager
+
       table#stale.table.table-striped.table-bordered.table-hover.table-condensed
         thead
         tbody
@@ -21,6 +24,23 @@ block content
           .modal-content Somecontent
 
     script.
+      //setup global/default variables
+      var current_url = '/admin/api/hashes';
+
+      $(function() {
+        var options = {
+          bootstrapMajorVersion: 3,
+          totalPages: 10,
+          onPageClicked: function(e,originalEvent,type,page){
+            buildTable(current_url + "?page=" + page);
+          }
+        }
+
+        $('.mypager').bootstrapPaginator(options);
+
+      });
+
+
       function buildTable(url) {
         $.getJSON(url, {}, function(json_data) {
           var table_body = $('tbody');
@@ -67,11 +87,12 @@ block content
       //<a data-toggle="modal" href="remote.html" data-target="#modal">Click me</a>
       //Handle Clicking on the Report Type buttons
       $(".btn").click(function() {
-        buildTable($(this).data('uri'));
+        current_url = $(this).data('uri');
+        buildTable(current_url);
       });
 
       //Build the initial table
-      buildTable('/admin/api/hashes');
+      buildTable(current_url);
 
     script.
 
