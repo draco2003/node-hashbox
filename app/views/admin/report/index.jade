@@ -7,51 +7,61 @@ block content
     .container
       h2 #Box Reports
       .btn-group
-        button(type="button" data-uri="/admin/api/stale").btn.btn-default Stale
-        button(type="button" data-uri="/admin/api/invalid").btn.btn-default Invalid
-        button(type="button" data-uri="/admin/api/hashes").btn.btn-default Hashes
+        button(type="button" data-report="stale").btn.btn-default.btn-report Stale
+        button(type="button" data-report="invalid").btn.btn-default.btn-report Invalid
+        button(type="button" data-report="hashes").btn.btn-default.btn-report Hashes
 
       .pager
         ul.mypager
 
-      table#stale.table.table-striped.table-bordered.table-hover.table-condensed
-        thead
-        tbody
+      form(action="/admin/api/acknowledge", method="GET", name="ack_form").actions
+        table#stale.table.table-striped.table-bordered.table-hover.table-condensed
+          thead
+          tbody
+        input(type="hidden", name="state", id="state", value="123")
+        button.btn.btn-primary Acknowledge
 
-      button(data-toggle="modal" data-target=".bs-example-modal-lg").btn.btn-primary Large modal
       div(tabindex="-1", role="dialog", aria-labelledby="hashModalLabel", aria-hidden="true").modal.fade.detail-modal
         .modal-dialog.modal-lg
           .modal-content Somecontent
 
     script.
       //setup global/default variables
-      var current_url = '/admin/api/hashes';
+      var default_report = 'hashes'
+        , api_base = '/admin/api/'
+        , options = {};
 
-      $(function() {
-        var options = {
+      function buildTable(report, page) {
+        options = {
           bootstrapMajorVersion: 3,
-          totalPages: 10,
+          totalPages: 20,
           onPageClicked: function(e,originalEvent,type,page){
-            buildTable(current_url + "?page=" + page);
+            buildTable(report, page);
           }
         }
 
+        // Set acknowledge state based on the report
+        $("input[name=state]").val(report);
+
+        // Setup the pager
         $('.mypager').bootstrapPaginator(options);
 
-      });
-
-
-      function buildTable(url) {
-        $.getJSON(url, {}, function(json_data) {
+        $.getJSON(api_base + report + '?page=' + page, {}, function(json_data) {
           var table_body = $('tbody');
           table_body.empty();
           var table_head = $('thead');
           table_head.empty();
           var table_header_row = $('<tr>');
-          if (json_data.rows === null) {
-            table_header_row.append($('<th>', {html: url + ' returns no data'}));
+
+          if (json_data.rows === null || json_data.rows.length === 0) {
+            table_header_row.append($('<th>', {html: 'The "' + report + '" report returns no data'}));
             table_head.append(table_header_row);
           } else {
+            if (report !== 'hashes') {
+              // add acknowledge column for reports with actions
+              table_header_row.append($('<th>', {html: 'ack'}));
+            }
+
             var count = json_data.rows.length;
             $.each(json_data.rows[0], function(index, item) {
               table_header_row.append($('<th>', {html: index}));
@@ -60,9 +70,13 @@ block content
 
             $.each(json_data.rows, function(jsonIndex, jsonRow) {
               var table_row = $('<tr>');
+
+              if (report !== 'hashes') {
+                table_row.append($('<td>', {html: '<input type="checkbox" name="hashIds[]" value="' + jsonRow.id + '" />'}));
+              }
               $.each(jsonRow, function(itemIndex, item) {
                 if (itemIndex === 'key') {
-                  item = $('<a>', {class: 'modalLink', href: '#', 'data-content-url': '/admin/api/hash/' + jsonRow.id, html: item});
+                  item = $('<a>', {class: 'modalLink', href: '#', 'data-content-url': api_base + 'hash/' + jsonRow.id, html: item});
                 }
                 table_row.append($('<td>', {html: item}));
               });
@@ -73,6 +87,7 @@ block content
                 $(".modalLink").click(function() {
                   $.getJSON($(this).data('content-url'), {}, function(json_data) {
                     $modalContent = $('<pre>', { html: JSON.stringify(json_data) });
+                    console.log(json_data);
                     console.log(template(json_data));
                     $('.detail-modal').find('.modal-content').html(template(json_data));
                     $('.detail-modal').modal('show');
@@ -84,19 +99,63 @@ block content
         });
       }
 
-      //<a data-toggle="modal" href="remote.html" data-target="#modal">Click me</a>
       //Handle Clicking on the Report Type buttons
-      $(".btn").click(function() {
-        current_url = $(this).data('uri');
-        buildTable(current_url);
+      $(".btn-report").click(function() {
+        buildTable($(this).data('report'), 0);
       });
 
       //Build the initial table
-      buildTable(current_url);
+      buildTable(default_report, 0);
 
     script.
 
-      var source = "<div><span></span><ul>{{#rows}}<li>{{> link}}</li>{{/rows}}</ul></div>";
+      var source = '<div>Hash Details:{{#rows}} ' +
+      '<div>HashId: {{hashRow.id}}</div>' +
+      '<div>Key: {{hashRow.key}}</div>' +
+      '<div>Hash: {{hashRow.hash}}</div>' +
+      '<div>Created: {{hashRow.createdAt}}</div>' +
+      '<div><h4>Other Hashes for this Key:</h4><table class="table table-striped table-bordered">' +
+      '<thead>' +
+      '<tr><th>Id</th><th>Key</th><th>Hash</th><th>CreatedAt</th></tr>' +
+      '</thead>' +
+      '<tbody>' +
+      '{{#keyRows}}' +
+      '<tr>' +
+      '<td>{{id}}</td>' +
+      '<td>{{key}}</td>' +
+      '<td>{{hash}}</td>' +
+      '<td>{{createdAt}}</td>' +
+      '</tr>' +
+      '{{/keyRows}}' +
+      '</tbody></table></div>' +
+      '<div><h4>Hash Audit Entries for this Key:</h4><table class="table table-striped table-bordered">' +
+      '{{#hashAuditRows}}' +
+      '<tr>' +
+      '<td>{{id}}</td>' +
+      '<td>{{hash}}</td>' +
+      '<td>{{createdAt}}</td>' +
+      '<td>{{updatedAt}}</td>' +
+      '<td>{{confirmedAt}}</td>' +
+      '<td>{{hashId}}</td>' +
+      '</tr>' +
+      '{{/hashAuditRows}}</table></div>' +
+      '<div><h4>Hash Verify Entries for this Key:</h4><table class="table table-striped table-bordered">' +
+      '<thead>' +
+      '<tr><th>Id</th><th>CreatedAt</th><th>updatedAt</th><th>ConfirmedStaleAt</th><th>hashId</th></tr>' +
+      '</thead>' +
+      '<tbody>' +
+      '{{#hashVerifyRows}}' +
+      '<tr>' +
+      '<td>{{id}}</td>' +
+      '<td>{{createdAt}}</td>' +
+      '<td>{{updatedAt}}</td>' +
+      '<td>{{confirmedStaleAt}}</td>' +
+      '<td>{{hashId}}</td>' +
+      '</tr>' +
+      '{{/hashVerifyRows}}' +
+      '</tbody></table></div>' +
+      '{{/rows}}</div>';
+
 
       Handlebars.registerPartial('link', '<a href="/people/{{id}}">{{key}}</a>')
       var template = Handlebars.compile(source);

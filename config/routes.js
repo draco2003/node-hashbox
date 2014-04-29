@@ -21,11 +21,13 @@ module.exports = function routes() {
   this.namespace('admin', function() {
     //Admin Index
     this.root('report#index');
+    this.match('hash/:hashId', 'report#hash', {via: 'get'});
     this.namespace('api', function() {
       this.match('stale', 'api#stale', {via: 'get'});
       this.match('invalid', 'api#invalid', {via: 'get'});
       this.match('hashes', 'api#hashes', {via: 'get'});
       this.match('hash/:hashId', 'api#hash', {via: 'get'});
+      this.match('acknowledge', 'api#acknowledge', {via: 'get'});
     })
   });
 }

@@ -1,0 +1,85 @@
+
+extends ../../layout/layout
+
+block content
+
+  body
+    .container
+      .panel.panel-default
+        .panel-heading Hash Details
+        table.table.table-striped.table-bordered
+          thead
+            tr
+              th Id
+              th Key
+              th Hash
+              th CreatedAt
+          tbody
+            tr
+              td #{hashDetails.id}
+              td #{hashDetails.key}
+              td #{hashDetails.hash}
+              td #{hashDetails.createdAt}
+
+      if keyRows.length > 0
+        .panel.panel-default
+          .panel-heading Other Hashes for this Key:
+          table.table.table-striped.table-bordered
+            thead
+              tr
+                th Id
+                th Key
+                th Hash
+                th CreatedAt
+            tbody
+            each keyItem in keyRows
+              tr
+                td #{keyItem.id}
+                td #{keyItem.key}
+                td #{keyItem.hash}
+                td #{keyItem.createdAt}
+
+      .panel.panel-default
+        .panel-heading Hash Audit Entries for this Key:
+        table.table.table-striped.table-bordered
+          if auditRows.length > 0
+            thead
+              tr
+                th Id
+                th Hash
+                th CreatedAt
+                th UpdatedAt
+                th ConfirmedAt
+                th Hash Id
+            tbody
+              each auditItem in auditRows
+                tr
+                  td #{auditItem.id}
+                  td #{auditItem.hash}
+                  td #{auditItem.createdAt}
+                  td #{auditItem.updatedAt}
+                  td #{auditItem.confirmedAt}
+                  td #{auditItem.hashId}
+          else
+            tr
+              td No Audit Entries for this Hash key
+
+      .panel.panel-default
+        .panel-heading Hash Verify Entries for this Key:
+        table.table.table-striped.table-bordered
+          thead
+            tr
+              th Id
+              th CreatedAt
+              th updatedAt
+              th ConfirmedStaleAt
+              th hashId
+          tbody
+            each verifyItem in verifyRows
+              tr
+                td #{verifyItem.id}
+                td #{verifyItem.createdAt}
+                td #{verifyItem.updatedAt}
+                td #{verifyItem.confirmedStaleAt}
+                td #{verifyItem.hashId}
+

@@ -23,7 +23,6 @@ apiController.before(
     var count = Number(self.param('count')) || 100;
     options.page = page;
     options.count = count;
-
     next();
 });
 
@@ -62,6 +61,20 @@ apiController.hash = function() {
   var hashId = Number(self.param('hashId'));
   console.log(hashId);
   HashBoxCore.hashDetail(options, hashId, function(err, results) {
+    var response = {};
+    response.rows = results;
+    self.report_err = err;
+    self.res.send(response);
+  });
+};
+
+apiController.acknowledge = function() {
+  var self = this
+  var hashIds = self.param('hashIds');
+  var state = self.param('state');
+  console.log(hashIds);
+  console.log(state);
+  HashBoxCore.acknowledge(options, hashIds, state, function(err, results) {
     var response = {};
     response.rows = results;
     self.report_err = err;
