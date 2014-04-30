@@ -72,11 +72,17 @@ block content
               var table_row = $('<tr>');
 
               if (report !== 'hashes') {
+
                 table_row.append($('<td>', {html: '<input type="checkbox" name="hashIds[]" value="' + jsonRow.id + '" />'}));
               }
               $.each(jsonRow, function(itemIndex, item) {
                 if (itemIndex === 'key') {
-                  item = $('<a>', {class: 'modalLink', href: '#', 'data-content-url': api_base + 'hash/' + jsonRow.id, html: item});
+                  if (report !== 'hashes') {
+                    linkId = jsonRow.hashId;
+                  } else {
+                    linkId = jsonRow.id;
+                  }
+                  item = $('<a>', {href: '/admin/hash/' + linkId, html: item});
                 }
                 table_row.append($('<td>', {html: item}));
               });
@@ -109,52 +115,7 @@ block content
 
     script.
 
-      var source = '<div>Hash Details:{{#rows}} ' +
-      '<div>HashId: {{hashRow.id}}</div>' +
-      '<div>Key: {{hashRow.key}}</div>' +
-      '<div>Hash: {{hashRow.hash}}</div>' +
-      '<div>Created: {{hashRow.createdAt}}</div>' +
-      '<div><h4>Other Hashes for this Key:</h4><table class="table table-striped table-bordered">' +
-      '<thead>' +
-      '<tr><th>Id</th><th>Key</th><th>Hash</th><th>CreatedAt</th></tr>' +
-      '</thead>' +
-      '<tbody>' +
-      '{{#keyRows}}' +
-      '<tr>' +
-      '<td>{{id}}</td>' +
-      '<td>{{key}}</td>' +
-      '<td>{{hash}}</td>' +
-      '<td>{{createdAt}}</td>' +
-      '</tr>' +
-      '{{/keyRows}}' +
-      '</tbody></table></div>' +
-      '<div><h4>Hash Audit Entries for this Key:</h4><table class="table table-striped table-bordered">' +
-      '{{#hashAuditRows}}' +
-      '<tr>' +
-      '<td>{{id}}</td>' +
-      '<td>{{hash}}</td>' +
-      '<td>{{createdAt}}</td>' +
-      '<td>{{updatedAt}}</td>' +
-      '<td>{{confirmedAt}}</td>' +
-      '<td>{{hashId}}</td>' +
-      '</tr>' +
-      '{{/hashAuditRows}}</table></div>' +
-      '<div><h4>Hash Verify Entries for this Key:</h4><table class="table table-striped table-bordered">' +
-      '<thead>' +
-      '<tr><th>Id</th><th>CreatedAt</th><th>updatedAt</th><th>ConfirmedStaleAt</th><th>hashId</th></tr>' +
-      '</thead>' +
-      '<tbody>' +
-      '{{#hashVerifyRows}}' +
-      '<tr>' +
-      '<td>{{id}}</td>' +
-      '<td>{{createdAt}}</td>' +
-      '<td>{{updatedAt}}</td>' +
-      '<td>{{confirmedStaleAt}}</td>' +
-      '<td>{{hashId}}</td>' +
-      '</tr>' +
-      '{{/hashVerifyRows}}' +
-      '</tbody></table></div>' +
-      '{{/rows}}</div>';
+
 
 
       Handlebars.registerPartial('link', '<a href="/people/{{id}}">{{key}}</a>')
