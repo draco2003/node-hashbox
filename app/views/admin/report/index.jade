@@ -84,17 +84,27 @@ block content
                   }
                   item = $('<a>', {href: '/admin/hash/' + linkId, html: item});
                 }
+
+                // DB Column naming convetion anything ending in At is a date
+                if (itemIndex.indexOf('At') > -1 && item !== null) {
+                  item = $('<span>', {class: 'date', html: item});
+                }
+
+
                 table_row.append($('<td>', {html: item}));
               });
 
               table_body.append(table_row);
               if (!--count) {
                 $('#stale').tablesorter();
+                $('.date').each(function (index, dateElem) {
+                  var $dateElem = $(dateElem);
+                  var formatted = moment(parseInt($dateElem.text())).format('YY-MM-DD HH:mm');
+                  $dateElem.text(formatted);
+                });
                 $(".modalLink").click(function() {
                   $.getJSON($(this).data('content-url'), {}, function(json_data) {
                     $modalContent = $('<pre>', { html: JSON.stringify(json_data) });
-                    console.log(json_data);
-                    console.log(template(json_data));
                     $('.detail-modal').find('.modal-content').html(template(json_data));
                     $('.detail-modal').modal('show');
                   });
