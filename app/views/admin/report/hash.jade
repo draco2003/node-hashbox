@@ -93,6 +93,8 @@ block content
     script.
       $('.date').each(function (index, dateElem) {
         var $dateElem = $(dateElem);
-        var formatted = moment(parseInt($dateElem.text())).format('MM-DD-YYYY HH:mm');
-        $dateElem.text(formatted);
+        if ($dateElem.text() !== '') {
+          var formatted = moment(parseInt($dateElem.text())).format('MM-DD-YYYY HH:mm');
+          $dateElem.text(formatted);
+        }
       });
