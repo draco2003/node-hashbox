@@ -12,7 +12,7 @@ block content
         button(type="button" data-report="hashes").btn.btn-default.btn-report Hashes
 
       .pager
-        ul.mypager
+        ul.mypager1
 
       form(action="/admin/api/acknowledge", method="GET", name="ack_form").actions
         table#stale.table.table-striped.table-bordered.table-hover.table-condensed
@@ -27,7 +27,7 @@ block content
 
     script.
       //setup global/default variables
-      var default_report = 'hashes'
+      var default_report = 'invalid'
         , api_base = '/admin/api/'
         , options = {};
 
@@ -99,7 +99,7 @@ block content
                 $('#stale').tablesorter();
                 $('.date').each(function (index, dateElem) {
                   var $dateElem = $(dateElem);
-                  var formatted = moment(parseInt($dateElem.text())).format('YY-MM-DD HH:mm');
+                  var formatted = moment(parseInt($dateElem.text())).format('MM-DD-YYYY HH:mm');
                   $dateElem.text(formatted);
                 });
                 $(".modalLink").click(function() {

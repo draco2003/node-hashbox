@@ -19,7 +19,8 @@ block content
               td #{hashDetails.id}
               td #{hashDetails.key}
               td #{hashDetails.hash}
-              td #{hashDetails.createdAt}
+              td
+                span.date #{hashDetails.createdAt}
 
       if keyRows.length > 0
         .panel.panel-default
@@ -37,7 +38,8 @@ block content
                 td #{keyItem.id}
                 td #{keyItem.key}
                 td #{keyItem.hash}
-                td #{keyItem.createdAt}
+                td
+                  span.date #{keyItem.createdAt}
 
       .panel.panel-default
         .panel-heading Hash Audit Entries for this Key:
@@ -56,9 +58,12 @@ block content
                 tr
                   td #{auditItem.id}
                   td #{auditItem.hash}
-                  td #{auditItem.createdAt}
-                  td #{auditItem.updatedAt}
-                  td #{auditItem.confirmedAt}
+                  td
+                    span.date #{auditItem.createdAt}
+                  td
+                    span.date #{auditItem.updatedAt}
+                  td
+                    span.date #{auditItem.confirmedAt}
                   td #{auditItem.hashId}
           else
             tr
@@ -78,12 +83,16 @@ block content
             each verifyItem in verifyRows
               tr
                 td #{verifyItem.id}
-                td #{verifyItem.createdAt}
-                td #{verifyItem.updatedAt}
-                td #{verifyItem.confirmedStaleAt}
+                td
+                  span.date #{verifyItem.createdAt}
+                td
+                  span.date #{verifyItem.updatedAt}
+                td
+                  span.date #{verifyItem.confirmedStaleAt}
                 td #{verifyItem.hashId}
-
     script.
-      $(function () {
-
+      $('.date').each(function (index, dateElem) {
+        var $dateElem = $(dateElem);
+        var formatted = moment(parseInt($dateElem.text())).format('MM-DD-YYYY HH:mm');
+        $dateElem.text(formatted);
       });
