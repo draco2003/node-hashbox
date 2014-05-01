@@ -17,15 +17,15 @@ reportController.hash = function() {
     if (err) {
       console.log(err);
       self.results = {};
+      self.redirect('/admin/');
     } else {
       console.log(results);
       self.hashDetails = results.hashRow;
       self.keyRows = results.keyRows;
       self.auditRows = results.hashAuditRows;
       self.verifyRows = results.hashVerifyRows;
+      self.render();
     }
-    self.testme = 'hello';
-    self.render();
   });
 };
 module.exports = reportController;

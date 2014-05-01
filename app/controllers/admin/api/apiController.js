@@ -78,7 +78,7 @@ apiController.acknowledge = function() {
     var response = {};
     response.rows = results;
     self.report_err = err;
-    self.res.send(response);
+    self.res.redirect('/admin/');
   });
 };
 
